@@ -7,5 +7,6 @@ const router = express.Router();
 router.get('',auth,saucesCtrl.getAllSauces);
 router.get('/:id',auth,saucesCtrl.getSauces);
 router.post('', auth,multer,saucesCtrl.sendSauces);
+router.put('/:id', auth,multer,saucesCtrl.changeSauces);
 
 module.exports = router;
