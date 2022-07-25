@@ -53,3 +53,22 @@ exports.changeSauces = (req, res, next) => {
             res.status(400).json({ error });
         });
 };
+
+exports.deleteSauces = (req, res, next) => {
+    Sauces.findOne({ _id: req.params.id})
+        .then(sauces => {
+            if (sauces.userId != req.auth.userId) {
+                res.status(401).json({message: 'Not authorized'});
+            } else {
+                const filename = sauces.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    Sauces.deleteOne({_id: req.params.id})
+                        .then(() => { res.status(200).json({message: 'Objet supprimé !'})})
+                        .catch(error => res.status(401).json({ error }));
+                });
+            }
+        })
+        .catch( error => {
+            res.status(500).json({ error });
+        });
+};

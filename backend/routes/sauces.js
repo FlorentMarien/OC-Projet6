@@ -8,5 +8,6 @@ router.get('',auth,saucesCtrl.getAllSauces);
 router.get('/:id',auth,saucesCtrl.getSauces);
 router.post('', auth,multer,saucesCtrl.sendSauces);
 router.put('/:id', auth,multer,saucesCtrl.changeSauces);
+router.delete('/:id', auth,multer,saucesCtrl.deleteSauces);
 
 module.exports = router;
