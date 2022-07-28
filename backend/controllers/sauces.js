@@ -72,3 +72,35 @@ exports.deleteSauces = (req, res, next) => {
             res.status(500).json({ error });
         });
 };
+
+exports.sendLikeSauces = ( req , res , next) => {
+
+    let like=req.body.like;
+    let userId=req.auth.userId;
+    Sauces.findOne({ _id: req.params.id})
+    .then(sauces => {
+        let indexLiked = sauces.usersLiked.indexOf(userId);
+        let indexDisliked = sauces.usersDisliked.indexOf(userId);
+        if(like==0){
+            if(indexLiked!==-1){
+                sauces.usersLiked.splice(indexLiked,1);
+            }
+            else if(indexDisliked!==-1){
+                sauces.usersDisliked.splice(indexDisliked,1);
+            }
+        }
+        else if(like==-1){
+            sauces.usersDisliked.push(userId);
+        }
+        else if(like==1){
+            sauces.usersLiked.push(userId);
+        }    
+        sauces.likes=sauces.usersLiked.length;
+        sauces.dislikes=sauces.usersDisliked.length;
+        Sauces.updateOne({ _id: req.params.id}, { likes:sauces.likes,usersLiked:sauces.usersLiked,dislikes:sauces.dislikes,usersDisliked:sauces.usersDisliked})
+            .then(() => res.status(200).json({message : 'Objet Liké!'}))
+            .catch(error => res.status(401).json({ error }));      
+        })       
+        .catch(error => ({error}));
+};
+ 
