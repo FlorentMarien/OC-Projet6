@@ -1,5 +1,5 @@
 const Sauces = require('../models/Sauces');
-const fs = require('fs');
+const { unlink } = require('fs');
 
 exports.getAllSauces = (req, res) => {
     Sauces.find()
@@ -55,7 +55,9 @@ exports.changeSauces = (req, res) => {
             if (req.file) {
                 //Si changement d'image suppresion de l'ancienne
                 const filename = sauces.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`);
+                unlink(`images/${filename}`, function () {
+                    console.log('Delete images:' + filename);
+                });
             }
             Sauces.updateOne(
                 {
@@ -93,7 +95,7 @@ exports.deleteSauces = (req, res) => {
                 });
             } else {
                 const filename = sauces.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
+                unlink(`images/${filename}`, () => {
                     Sauces.deleteOne({
                         _id: req.params.id,
                     })
