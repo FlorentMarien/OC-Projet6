@@ -34,3 +34,6 @@ Thumbs.db
 
 # Images
 images/*
+
+# MongoDB key
+.env

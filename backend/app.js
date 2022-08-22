@@ -3,13 +3,15 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 const saucesRoute = require('./routes/sauces');
 const path = require('path');
-
+const dotenv = require('dotenv');
 const app = express();
+dotenv.config();
 mongoose
-    .connect(
-        'mongodb+srv://Florent62350:IH2qlX4kk4Ek9XsG@cluster0.u1t8c.mongodb.net/?retryWrites=true&w=majority',
-        { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'Project6' }
-    )
+    .connect(process.env.MONGODB_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        dbName: 'Project6',
+    })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
